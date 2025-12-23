@@ -6,7 +6,7 @@ import '../styles/App.css';
 import emptyBoxIcon from './empty-box.png';
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
 
 function TasksView({ selectedFolder, folders, onViewDateInCalendar }) {
   const [tasks, setTasks] = useState([]);
