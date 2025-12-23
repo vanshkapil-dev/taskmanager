@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cron = require('node-cron');
+const path = require('path');
 const { sendTaskReminders } = require('./services/emailService');
 
 const app = express();
@@ -10,6 +11,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'build')));
 
 // MongoDB Connection
 mongoose
@@ -30,6 +32,11 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/folders', require('./routes/folders'));
 app.use('/api/stats', require('./routes/stats'));
+
+// Serve React app for any unmatched routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // Health check
 app.get('/api/health', (req, res) => {
